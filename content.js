@@ -11,7 +11,7 @@ try {
 // Check if current domain is playentry.org
 const isOfficialSite = window.location.hostname.includes('playentry.org');
 
-// If not official site or XSS, disable login buttons
+// If not official site or it is XSS, disable login buttons
 if (!isOfficialSite || hasCbXSS) {
   // Keep track of already disabled buttons and shown alert
   const disabledButtons = new Set();
