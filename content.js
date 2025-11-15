@@ -3,7 +3,7 @@ let hasCbXSS = false;
 try {
   const search = new URLSearchParams(window.location.search);
   const cbURL = search.get('cb');
-  hasCbXSS = cbURL && ['javascript:', 'data:', 'vbscript:'].includes(new URL(cbURL).protocol);
+  hasCbXSS = cbURL ? ['javascript:', 'data:', 'vbscript:'].includes(new URL(cbURL).protocol) : false;
 } catch(e) {
   console.error(e);
 }
@@ -115,6 +115,12 @@ if (!isOfficialSite || hasCbXSS) {
     disableLoginButton(signinButton);
     disableLoginButton(naverSigninButton);
     disableLoginButton(whalespaceSigninButton);
+
+    // Disable input control
+    const inputs = document.querySelectorAll('form input');
+    for (const input of inputs) {
+      input.disabled = true;
+    }
 
     // Check if this looks like a login page but no buttons were found
     if (!foundAnyButton && isLoginPage() && !alertShown) {
