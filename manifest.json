@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "엔트리-Aanmeldkontrole",
-  "version": "1.0",
+  "version": "1.1",
   "description": "엔트리 공식 사이트가 아닌 곳에서 로그인 시도 시 로그인 버튼을 비활성화 합니다.",
   "content_scripts": [
     {
