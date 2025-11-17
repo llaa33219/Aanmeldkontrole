@@ -88,7 +88,7 @@ if (!isOfficialSite || hasCbXSS) {
       button.style.background = 'red';
       button.style.cursor = 'not-allowed';
       button.style.pointerEvents = 'none';
-      button.textContent = '공식 사이트 아님. 로그인 불가';
+      button.textContent = hasCbXSS ? 'XSS 감지. 로그인 불가' : '공식 사이트 아님. 로그인 불가';
       
       // Prevent all click events
       button.addEventListener('click', (e) => {
