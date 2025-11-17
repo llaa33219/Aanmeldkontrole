@@ -1,8 +1,18 @@
+let hasCbXSS = false;
+
+try {
+  const search = new URLSearchParams(window.location.search);
+  const cbURL = search.get('cb');
+  hasCbXSS = cbURL ? ['javascript:', 'data:', 'vbscript:'].includes(new URL(cbURL).protocol) : false;
+} catch(e) {
+  console.error(e);
+}
+
 // Check if current domain is playentry.org
 const isOfficialSite = window.location.hostname.includes('playentry.org');
 
-// If not official site, disable login buttons
-if (!isOfficialSite) {
+// If not official site or it is XSS, disable login buttons
+if (!isOfficialSite || hasCbXSS) {
   // Keep track of already disabled buttons and shown alert
   const disabledButtons = new Set();
   let alertShown = false;
@@ -106,10 +116,18 @@ if (!isOfficialSite) {
     disableLoginButton(naverSigninButton);
     disableLoginButton(whalespaceSigninButton);
 
-    // Check if this looks like a login page but no buttons were found
-    if (!foundAnyButton && isLoginPage() && !alertShown) {
-      alertShown = true;
-      alert('공식 사이트 로그인 페이지가 아닌 것으로 판단되었지만 로그인 버튼을 찾을 수 없습니다. 주의해 주세요.');
+    // Disable input control
+    if (isLoginPage()) {
+      const inputs = document.querySelectorAll('form input');
+      for (const input of inputs) {
+        input.disabled = true;
+      }
+
+      // Check if this looks like a login page but no buttons were found
+      if (!foundAnyButton && !alertShown) {
+        alertShown = true;
+        alert('공식 사이트 로그인 페이지가 아닌 것으로 판단되었지만 로그인 버튼을 찾을 수 없습니다. 주의해 주세요.');
+      }
     }
   }
 
